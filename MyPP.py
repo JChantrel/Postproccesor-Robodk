@@ -47,6 +47,7 @@ class UI():
     global Folder
     Folder = StringVar()
     Folder.set('C:/Users/joeri/Documents/RoboDK/gen')
+    FolderSize = StringVar()
     Puls_Kort = StringVar()
     Puls_Kort.set('Pulserend')
 
@@ -60,11 +61,12 @@ class UI():
     Label(Window, text='Z hoogte plaat:').grid(row=7, sticky=E)
     Label(Window, text='Z Hoek torch:').grid(row=8, sticky=E)
     Label(Window, text='Laag hoogte:').grid(row=9, sticky=E)
-    Label(Window, text='(Voor errors)Dummy regels:').grid(row=10, sticky=E)
+    Label(Window, text='Dummy regels:').grid(row=10, sticky=E)
     Label(Window, text='Folder:').grid(row=11, sticky=E)
-    Label(Window, text='Pulserend/Kortsluit:').grid(row=12, sticky=E)
+    Label(Window, text='Programmas per subfolder:').grid(row=12, sticky=E)
+    Label(Window, text='Pulserend/Kortsluit:').grid(row=13, sticky=E)
 
-    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=13, columnspan=2, pady=5)
+    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=14, columnspan=2, pady=5)
 
     e0 = Entry(Window, textvariable = IArc)
     e1 = Entry(Window, textvariable = VArc)
@@ -77,7 +79,8 @@ class UI():
     e8 = Entry(Window, textvariable = LaagHoogte)
     e9 = Entry(Window, textvariable = DummyRegels)
     b10 = Button(Window, text = 'Browse', command=getFolderPath)
-    w11 = OptionMenu(Window, Puls_Kort, 'Pulserend', 'Kortsluit')
+    e11 = Entry(Window, textvariable = FolderSize)
+    w12 = OptionMenu(Window, Puls_Kort, 'Pulserend', 'Kortsluit')
 
     e0.insert(END, '60')
     e1.insert(END, '20.5')
@@ -89,6 +92,7 @@ class UI():
     e7.insert(END, '67')
     e8.insert(END, '2')
     e9.insert(END, '5')
+    e11.insert(END, '20')
 
     e0.grid(row=1, column=1, padx=7, pady=3)
     e1.grid(row=2, column=1, padx=7, pady=3)
@@ -101,7 +105,8 @@ class UI():
     e8.grid(row=9, column=1, padx=7, pady=3)
     e9.grid(row=10, column=1, padx=7, pady=3)
     b10.grid(row=11, column=1, padx=7, pady=3)
-    w11.grid(row=12, column=1, padx=7, pady=3)
+    e11.grid(row=12, column=1, padx=7, pady=3)
+    w12.grid(row=13, column=1, padx=7, pady=3)
 
     Window.mainloop()
 
@@ -146,6 +151,8 @@ class RobotPost(object):
 
     Puls_Kort = str(UI.Puls_Kort.get())     #Pulserend of kortsluit lassen
 
+    FolderSize = int(UI.FolderSize.get())   #Hoveel programmas's per folder
+
     Timeout = 120           #Maximaal wachten op de input
     TempInput = '5'         #Input nummer voor de Temp sensor
     StandOutTemp = 'ON'     #De standaard waarde die gegeven wordt door de Temp sensor
@@ -167,7 +174,7 @@ class RobotPost(object):
     LayerCount = 0
     Laatste_Doc = False
     F_COUNT = 1
-    FolderSize = 20
+
 
     ROBOT_POST = ''
     ROBOT_NAME = ''
