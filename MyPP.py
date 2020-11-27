@@ -47,6 +47,7 @@ class UI():
     global Folder
     Folder = StringVar()
     Folder.set('C:/Users/joeri/Documents/RoboDK/gen')
+    FolderSize = StringVar()
     Puls_Kort = StringVar()
     Puls_Kort.set('Pulserend')
 
@@ -60,12 +61,13 @@ class UI():
     Label(Window, text='Z hoogte plaat:').grid(row=7, sticky=E)
     Label(Window, text='Z Hoek torch:').grid(row=8, sticky=E)
     Label(Window, text='Laag hoogte:').grid(row=9, sticky=E)
-    Label(Window, text='(Voor errors)Dummy regels:').grid(row=10, sticky=E)
+    Label(Window, text='Dummy regels:').grid(row=10, sticky=E)
     Label(Window, text='Folder:').grid(row=11, sticky=E)
-    Label(Window, text='Pulserend/Kortsluit:').grid(row=12, sticky=E)
+    Label(Window, text='Programmas per subfolder:').grid(row=12, sticky=E)
+    Label(Window, text='Pulserend/Kortsluit:').grid(row=13, sticky=E)
 
-    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=13, columnspan=2, pady=5)
-    
+    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=14, columnspan=2, pady=5)
+
     e0 = Entry(Window, textvariable = IArc)
     e1 = Entry(Window, textvariable = VArc)
     e2 = Entry(Window, textvariable = TArc)
@@ -77,7 +79,8 @@ class UI():
     e8 = Entry(Window, textvariable = LaagHoogte)
     e9 = Entry(Window, textvariable = DummyRegels)
     b10 = Button(Window, text = 'Browse', command=getFolderPath)
-    w11 = OptionMenu(Window, Puls_Kort, 'Pulserend', 'Kortsluit') 
+    e11 = Entry(Window, textvariable = FolderSize)
+    w12 = OptionMenu(Window, Puls_Kort, 'Pulserend', 'Kortsluit')
 
     e0.insert(END, '60')
     e1.insert(END, '20.5')
@@ -89,7 +92,8 @@ class UI():
     e7.insert(END, '67')
     e8.insert(END, '2')
     e9.insert(END, '5')
-    
+    e11.insert(END, '20')
+
     e0.grid(row=1, column=1, padx=7, pady=3)
     e1.grid(row=2, column=1, padx=7, pady=3)
     e2.grid(row=3, column=1, padx=7, pady=3)
@@ -101,7 +105,8 @@ class UI():
     e8.grid(row=9, column=1, padx=7, pady=3)
     e9.grid(row=10, column=1, padx=7, pady=3)
     b10.grid(row=11, column=1, padx=7, pady=3)
-    w11.grid(row=12, column=1, padx=7, pady=3)
+    e11.grid(row=12, column=1, padx=7, pady=3)
+    w12.grid(row=13, column=1, padx=7, pady=3)
 
     Window.mainloop()
 
@@ -146,13 +151,15 @@ class RobotPost(object):
 
     Puls_Kort = str(UI.Puls_Kort.get())     #Pulserend of kortsluit lassen
 
+    FolderSize = int(UI.FolderSize.get())   #Hoveel programmas's per folder
+
     Timeout = 120           #Maximaal wachten op de input
     TempInput = '5'         #Input nummer voor de Temp sensor
     StandOutTemp = 'ON'     #De standaard waarde die gegeven wordt door de Temp sensor
                             #Dus de waarde als de temp niet te hoog is
-    
+
     REGISTER_DIGITS = 5
-    
+
     PULSES_X_DEG = [1, 1, 1, 1, 1, 1]
 
     #Variabel voor dingen bij te houden
@@ -165,22 +172,23 @@ class RobotPost(object):
     Weld = False
     Laag = 0
     LayerCount = 0
-    Tiende_Doc = False
+    Laatste_Doc = False
     F_COUNT = 1
-    
+
+
     ROBOT_POST = ''
     ROBOT_NAME = ''
     PROG_FILES = []
-    
+
     PROG_NAMES = []
     PROG_LIST = []
-    
+
     PROG_NAME = 'unknown'
     PROG_NAME_CURRENT = 'unknown'
-    
+
     nPages = 0
     PROG_NAMES_MAIN = []
-    
+
     PROG = []
     PROG_TARGETS = []
     LOG = ''
@@ -192,7 +200,7 @@ class RobotPost(object):
     AXES_TURNTABLE = []
     HAS_TRACK = False
     HAS_TURNTABLE = False
-    
+
     SPEED_BACKUP = None
     LAST_POSE = None
     POSE_FRAME = eye(4)
@@ -290,7 +298,7 @@ class RobotPost(object):
         header_ins += 'LR, LR005, Real, 0\n'
         header_ins += '\n'
         header_ins += '[Command]'
-        
+
         self.PROG.insert(0, header_ins)
         self.PROG_TARGETS.insert(0, header)
         self.PROG = self.PROG_TARGETS + self.PROG
@@ -316,7 +324,7 @@ class RobotPost(object):
             else:
                 return
         else:
-            filesave = folder + progname    
+            filesave = folder + progname
         fid = open(filesave, 'w')
         for line in self.PROG:
             fid.write(line)
@@ -342,7 +350,7 @@ class RobotPost(object):
         nfiles = len(self.PROG_LIST)
         if nfiles >= 1:
             for i in range(len(self.PROG_LIST)):
-                if i % 10 == 0:
+                if i % self.FolderSize == 0:
                     directory = 'test %i' % self.F_COUNT
                     parent_dir = self.Folder
                     path = os.path.join(parent_dir, directory)
@@ -362,7 +370,7 @@ class RobotPost(object):
                     j = 0
                     for prog_call in self.PROG_NAMES_MAIN:
                         j = j + 1
-                        if j <= i * 10 and j > i * 10 -10:
+                        if j <= i * self.FolderSize and j > i * self.FolderSize -self.FolderSize:
                             self.RunCode(prog_call, True)
                     self.ProgFinish(progname_main)
                 for i in range(self.F_COUNT-1,0,-1):
@@ -376,7 +384,7 @@ class RobotPost(object):
 
             FolderNum = 0
             for i in range(len(self.PROG_LIST)):
-                if i % 10 == 0:
+                if i % self.FolderSize == 0:
                     FolderNum = FolderNum + 1
                 self.PROG = self.PROG_LIST[i]
                 self.progsave('%s%s%i' % (self.Folder, '/test ', FolderNum), self.PROG_NAMES[i], False, show_result)
@@ -419,16 +427,16 @@ class RobotPost(object):
                 self.addline('CRATER, %i, %.1f, %.2f' % (self.IKra, self.VKra, self.TKra))
                 self.addline('ARC-OFF, ArcEnd1.prg, 1')
                 self.Weld = False
-                if self.nPages % 10 == 0 and self.nPages > 0:
-                    self.Tiende_Doc = True;                
+                if self.nPages % self.FolderSize == 0 and self.nPages > 0:
+                    self.Laatste_Doc = True;
         if self.Weld == True:
             WeldMove = 'W'
         else:
             WeldMove = 'N'
         self.addline('MOVEL, P%i, %s%s' % (target_id, self.STR_V, self.STR_CNT) + ' , 0, %s' % (WeldMove))
         self.LAST_POSE = pose
-        if self.Tiende_Doc == True:
-            self.Tiende_Doc = False
+        if self.Laatste_Doc == True:
+            self.Laatste_Doc = False
             self.LINE_COUNT = self.MAX_LINES_X_PROG
 
     def MoveC(self, pose1, joints1, pose2, joints2, conf_RLF_1=None, conf_RLF_2=None):
@@ -542,7 +550,7 @@ class RobotPost(object):
                 #    self.addline('Laag checken')
                 #    self.Laag = 0
                 #else:
-                #    self.Laag = self.Laag + 1                        
+                #    self.Laag = self.Laag + 1
                 return
             else:
                 return
@@ -671,7 +679,7 @@ def Pose(xyzrpw):
     x, y, z, r, p, w = xyzrpw
     a = r * math.pi / 180
     b = p * math.pi / 180
-    c = w * math.pi / 180 
+    c = w * math.pi / 180
     ca = math.cos(a)
     sa = math.sin(a)
     cb = math.cos(b)
