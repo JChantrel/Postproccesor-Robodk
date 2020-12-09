@@ -27,12 +27,43 @@ def Pose_2_Panasonic(pose):
 
 class UI():
 
-    Window = tkinter.Tk()
-    Window.title('Instellingen')
-
     def getFolderPath():
         folder_selected = filedialog.askdirectory()
         Folder.set(folder_selected)
+
+    def preset_puls():
+        e0.delete(0, END)
+        e1.delete(0, END)
+        e2.delete(0, END)
+        e3.delete(0, END)
+        e4.delete(0, END)
+        e5.delete(0, END)
+
+        e0.insert(END, '60')
+        e1.insert(END, '20.5')
+        e2.insert(END, '0.25')
+        e3.insert(END, '60')
+        e4.insert(END, '21')
+        e5.insert(END, '0.3')
+
+    def preset_kort():
+        e0.delete(0, END)
+        e1.delete(0, END)
+        e2.delete(0, END)
+        e3.delete(0, END)
+        e4.delete(0, END)
+        e5.delete(0, END)
+
+        e0.insert(END, '95')
+        e1.insert(END, '16.6')
+        e2.insert(END, '0.25')
+        e3.insert(END, '60')
+        e4.insert(END, '16')
+        e5.insert(END, '0.3')
+
+    global Window
+    Window = tkinter.Tk()
+    Window.title('Instellingen')
 
     VArc = StringVar()
     IArc = StringVar()
@@ -48,8 +79,10 @@ class UI():
     Folder = StringVar()
     Folder.set('C:/Users/joeri/Documents/RoboDK/gen')
     FolderSize = StringVar()
+    global Puls_Kort
     Puls_Kort = StringVar()
     Puls_Kort.set('Pulserend')
+    str_out = StringVar()
 
     Label(Window, text='Vul hieronder de gewenste waarde in').grid(row=0, columnspan=2)
     Label(Window, text='Arc stroom:').grid(row=1, sticky=E)
@@ -66,7 +99,15 @@ class UI():
     Label(Window, text='Programmas per subfolder:').grid(row=12, sticky=E)
     Label(Window, text='Pulserend/Kortsluit:').grid(row=13, sticky=E)
 
-    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=14, columnspan=2, pady=5)
+    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=15, columnspan=2, pady=5)
+
+    global e0
+    global e1
+    global e2
+    global e3
+    global e4
+    global e5
+    my_list = ['Pulserend','Kortsluit']
 
     e0 = Entry(Window, textvariable = IArc)
     e1 = Entry(Window, textvariable = VArc)
@@ -80,14 +121,16 @@ class UI():
     e9 = Entry(Window, textvariable = DummyRegels)
     b10 = Button(Window, text = 'Browse', command=getFolderPath)
     e11 = Entry(Window, textvariable = FolderSize)
-    w12 = OptionMenu(Window, Puls_Kort, 'Pulserend', 'Kortsluit')
+    w12 = OptionMenu(Window, Puls_Kort, *my_list)
+    b13 = Button(Window, text = 'Preset pulserend', command=preset_puls)
+    b14 = Button(Window, text = 'Preset kortsluit', command=preset_kort)
 
-    e0.insert(END, '60')
-    e1.insert(END, '20.5')
-    e2.insert(END, '0.25')
-    e3.insert(END, '60')
-    e4.insert(END, '21')
-    e5.insert(END, '0.3')
+    #e0.insert(END, '60')
+    #e1.insert(END, '20.5')
+    #e2.insert(END, '0.25')
+    #e3.insert(END, '60')
+    #e4.insert(END, '21')
+    #e5.insert(END, '0.3')
     e6.insert(END, '230.654')
     e7.insert(END, '67')
     e8.insert(END, '2')
@@ -107,6 +150,8 @@ class UI():
     b10.grid(row=11, column=1, padx=7, pady=3)
     e11.grid(row=12, column=1, padx=7, pady=3)
     w12.grid(row=13, column=1, padx=7, pady=3)
+    b13.grid(row=14, column=0, padx=7, pady=3)
+    b14.grid(row=14, column=1, padx=7, pady=3)
 
     Window.mainloop()
 
@@ -149,7 +194,7 @@ class RobotPost(object):
 
     Folder = str(Folder.get())              #In welke folder alles opgeslagen moet worden
 
-    Puls_Kort = str(UI.Puls_Kort.get())     #Pulserend of kortsluit lassen
+    Puls_Kort = str(Puls_Kort.get())     #Pulserend of kortsluit lassen
 
     FolderSize = int(UI.FolderSize.get())   #Hoveel programmas's per folder
 
@@ -569,7 +614,7 @@ class RobotPost(object):
         if message == 'Show Weld gun':
             if self.Puls_Kort == 'Pulserend':
                 self.addline('WPLS, ON')
-            else: 
+            if self.Puls_Kort == 'Kortsluit':
                 self.addline('WPLS, OFF')
             self.addline('CLEAR, GD#(ALL)')
             self.addline('CLEAR, GR#(ALL)')
