@@ -614,7 +614,7 @@ class RobotPost(object):
         if message == 'Show Weld gun':
             if self.Puls_Kort == 'Pulserend':
                 self.addline('WPLS, ON')
-            if self.Puls_Kort == 'Kortsluit':
+            else:
                 self.addline('WPLS, OFF')
             self.addline('CLEAR, GD#(ALL)')
             self.addline('CLEAR, GR#(ALL)')
