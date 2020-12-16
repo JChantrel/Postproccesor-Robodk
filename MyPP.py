@@ -71,6 +71,7 @@ class UI():
     VKra = StringVar()
     IKra = StringVar()
     TKra = StringVar()
+    TVerloop = StringVar()
     Tafel = StringVar()
     TorchHoek = StringVar()
     LaagHoogte = StringVar()
@@ -84,22 +85,24 @@ class UI():
     Puls_Kort.set('Pulserend')
     str_out = StringVar()
 
-    Label(Window, text='Vul hieronder de gewenste waarde in').grid(row=0, columnspan=2)
-    Label(Window, text='Arc stroom:').grid(row=1, sticky=E)
-    Label(Window, text='Arc spanning:').grid(row=2, sticky=E)
-    Label(Window, text='Arc tijd:').grid(row=3, sticky=E)
-    Label(Window, text='Krater stroom:').grid(row=4, sticky=E)
-    Label(Window, text='Krater spanning:').grid(row=5, sticky=E)
-    Label(Window, text='Krater tijd:').grid(row=6, sticky=E)
-    Label(Window, text='Z hoogte plaat:').grid(row=7, sticky=E)
-    Label(Window, text='Z Hoek torch:').grid(row=8, sticky=E)
-    Label(Window, text='Laag hoogte:').grid(row=9, sticky=E)
-    Label(Window, text='Dummy regels:').grid(row=10, sticky=E)
-    Label(Window, text='Folder:').grid(row=11, sticky=E)
-    Label(Window, text='Programmas per subfolder:').grid(row=12, sticky=E)
-    Label(Window, text='Pulserend/Kortsluit:').grid(row=13, sticky=E)
+    Label(Window, text='Vul hieronder de gewenste waarde in', anchor=CENTER).grid(row=0, column=0, columnspan=3, pady=5)
+    Label(Window, text='Arc stroom:').grid(row=1, sticky=E, padx=5)
+    Label(Window, text='Arc spanning:').grid(row=2, sticky=E, padx=5)
+    Label(Window, text='Arc tijd:').grid(row=3, sticky=E, padx=5)
+    Label(Window, text='Krater stroom:').grid(row=4, sticky=E, padx=5)
+    Label(Window, text='Krater spanning:').grid(row=5, sticky=E, padx=5)
+    Label(Window, text='Krater tijd:').grid(row=6, sticky=E, padx=5)
+    Label(Window, text='Verloop tijd').grid(row=7, sticky=E, padx=5)
+    Label(Window, text='Z hoogte plaat:').grid(row=8, sticky=E, padx=5)
+    Label(Window, text='Z Hoek torch:').grid(row=9, sticky=E, padx=5)
+    Label(Window, text='Laag hoogte:').grid(row=10, sticky=E, padx=5)
+    Label(Window, text='Dummy regels:').grid(row=11, sticky=E, padx=5)
+    Label(Window, text='Folder:').grid(row=12, sticky=E, padx=5)
+    Label(Window, text='Programmas per subfolder:').grid(row=13, sticky=E, padx=5)
+    Label(Window, text='Pulserend/Kortsluit:').grid(row=14, sticky=E, padx=5)
+    Label(Window, text='Presets:').grid(row=15, sticky=E, padx=5)
 
-    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=15, columnspan=2, pady=5)
+    Button(Window, text='OK', width=10, command=Window.destroy).grid(row=17, columnspan=3, pady=5)
 
     global e0
     global e1
@@ -109,21 +112,22 @@ class UI():
     global e5
     my_list = ['Pulserend','Kortsluit']
 
-    e0 = Entry(Window, textvariable = IArc)
-    e1 = Entry(Window, textvariable = VArc)
-    e2 = Entry(Window, textvariable = TArc)
-    e3 = Entry(Window, textvariable = IKra)
-    e4 = Entry(Window, textvariable = VKra)
-    e5 = Entry(Window, textvariable = TKra)
-    e6 = Entry(Window, textvariable = Tafel)
-    e7 = Entry(Window, textvariable = TorchHoek)
-    e8 = Entry(Window, textvariable = LaagHoogte)
-    e9 = Entry(Window, textvariable = DummyRegels)
-    b10 = Button(Window, text = 'Browse', command=getFolderPath)
-    e11 = Entry(Window, textvariable = FolderSize)
-    w12 = OptionMenu(Window, Puls_Kort, *my_list)
-    b13 = Button(Window, text = 'Preset pulserend', command=preset_puls)
-    b14 = Button(Window, text = 'Preset kortsluit', command=preset_kort)
+    e0 = Entry(Window, width=10, textvariable = IArc)
+    e1 = Entry(Window, width=10, textvariable = VArc)
+    e2 = Entry(Window, width=10, textvariable = TArc)
+    e3 = Entry(Window, width=10, textvariable = IKra)
+    e4 = Entry(Window, width=10, textvariable = VKra)
+    e5 = Entry(Window, width=10, textvariable = TKra)
+    e6 = Entry(Window, width=10, textvariable = TVerloop)
+    e7 = Entry(Window, width=10, textvariable = Tafel)
+    e8 = Entry(Window, width=10, textvariable = TorchHoek)
+    e9 = Entry(Window, width=10, textvariable = LaagHoogte)
+    e10 = Entry(Window, width=10, textvariable = DummyRegels)
+    b11 = Button(Window, text = 'Browse', command=getFolderPath)
+    e12 = Entry(Window, width=10, textvariable = FolderSize)
+    w13 = OptionMenu(Window, Puls_Kort, *my_list)
+    b14 = Button(Window, text = 'Pulserend', width=12, command=preset_puls)
+    b15 = Button(Window, text = 'Kortsluit', width=12, command=preset_kort)
 
     #e0.insert(END, '60')
     #e1.insert(END, '20.5')
@@ -131,27 +135,40 @@ class UI():
     #e3.insert(END, '60')
     #e4.insert(END, '21')
     #e5.insert(END, '0.3')
-    e6.insert(END, '230.654')
-    e7.insert(END, '67')
-    e8.insert(END, '2')
-    e9.insert(END, '5')
-    e11.insert(END, '20')
+    e6.insert(END, '2')
+    e7.insert(END, '230.654')
+    e8.insert(END, '67')
+    e9.insert(END, '2')
+    e10.insert(END, '5')
+    e12.insert(END, '20')
 
-    e0.grid(row=1, column=1, padx=7, pady=3)
-    e1.grid(row=2, column=1, padx=7, pady=3)
-    e2.grid(row=3, column=1, padx=7, pady=3)
-    e3.grid(row=4, column=1, padx=7, pady=3)
-    e4.grid(row=5, column=1, padx=7, pady=3)
-    e5.grid(row=6, column=1, padx=7, pady=3)
-    e6.grid(row=7, column=1, padx=7, pady=3)
-    e7.grid(row=8, column=1, padx=7, pady=3)
-    e8.grid(row=9, column=1, padx=7, pady=3)
-    e9.grid(row=10, column=1, padx=7, pady=3)
-    b10.grid(row=11, column=1, padx=7, pady=3)
-    e11.grid(row=12, column=1, padx=7, pady=3)
-    w12.grid(row=13, column=1, padx=7, pady=3)
-    b13.grid(row=14, column=0, padx=7, pady=3)
-    b14.grid(row=14, column=1, padx=7, pady=3)
+    e0.grid(row=1, column=1, pady=3)
+    e1.grid(row=2, column=1, pady=3)
+    e2.grid(row=3, column=1, pady=3)
+    e3.grid(row=4, column=1, pady=3)
+    e4.grid(row=5, column=1, pady=3)
+    e5.grid(row=6, column=1, pady=3)
+    e6.grid(row=7, column=1, pady=3)
+    e7.grid(row=8, column=1, pady=3)
+    e8.grid(row=9, column=1, pady=3)
+    e9.grid(row=10, column=1, pady=3)
+    e10.grid(row=11, column=1, pady=3)
+    b11.grid(row=12, column=1, pady=3)
+    e12.grid(row=13, column=1, pady=3)
+    w13.grid(row=14, column=1, columnspan=2, padx=5, pady=3)
+    b14.grid(row=15, column=1, columnspan=2, padx=5, pady=3)
+    b15.grid(row=16, column=1, columnspan=2, padx=5, pady=3)
+
+    Label(Window, text='A').grid(row=1, column=2, sticky=W, padx=5)
+    Label(Window, text='V').grid(row=2, column=2, sticky=W, padx=5)
+    Label(Window, text='s').grid(row=3, column=2, sticky=W, padx=5)
+    Label(Window, text='A').grid(row=4, column=2, sticky=W, padx=5)
+    Label(Window, text='V').grid(row=5, column=2, sticky=W, padx=5)
+    Label(Window, text='s').grid(row=6, column=2, sticky=W, padx=5)
+    Label(Window, text='s').grid(row=7, column=2, sticky=W, padx=5)
+    Label(Window, text='mm').grid(row=8, column=2, sticky=W, padx=5)
+    Label(Window, text='°').grid(row=9, column=2, sticky=W, padx=5)
+    Label(Window, text='mm').grid(row=10, column=2, sticky=W, padx=5)
 
     Window.mainloop()
 
@@ -176,13 +193,15 @@ class RobotPost(object):
     SPARE_PR = 95
 
     #Variabele voor het lassen
-    VArc = float(UI.VArc.get())               #Las spanning
+    VArc = float(UI.VArc.get())             #Las spanning
     IArc = float(UI.IArc.get())             #Las stroom
     TArc = float(UI.TArc.get())             #Voorloopsnelheid
 
-    VKra = float(UI.VKra.get())               #Krater spanning
+    VKra = float(UI.VKra.get())             #Krater spanning
     IKra = float(UI.IKra.get())             #Krater stroom
     TKra = float(UI.TKra.get())             #Krater tijd
+
+    TVerloop = float(UI.TVerloop.get())
 
     Tafel = float(UI.Tafel.get())           #Z coordinaat van de tafel
 
@@ -194,7 +213,7 @@ class RobotPost(object):
 
     Folder = str(Folder.get())              #In welke folder alles opgeslagen moet worden
 
-    Puls_Kort = str(Puls_Kort.get())     #Pulserend of kortsluit lassen
+    Puls_Kort = str(Puls_Kort.get())        #Pulserend of kortsluit lassen
 
     FolderSize = int(UI.FolderSize.get())   #Hoveel programmas's per folder
 
@@ -219,6 +238,7 @@ class RobotPost(object):
     LayerCount = 0
     Laatste_Doc = False
     F_COUNT = 1
+    StrTVerloop = '%.2f, m/min' % TVerloop
 
 
     ROBOT_POST = ''
@@ -460,7 +480,7 @@ class RobotPost(object):
         self.page_size_control()
         target_id = self.add_target_cartesian(pose, joints, conf_RLF)
 
-        if self.STR_V == '1.80, m/min' or self.STR_V == '1.20, m/min':
+        if self.STR_V == '1.80, m/min' or self.STR_V == '1.20, m/min' or self.STR_V == self.StrTVerloop:
             if self.Weld == False:
                 self.PROG[-1] = self.PROG[-1].replace('N', 'W')
                 self.addline('ARC-SET, %i, %.1f, %.2f' % (self.IArc, self.VArc, self.TArc))
@@ -475,6 +495,7 @@ class RobotPost(object):
                 if self.nPages % self.FolderSize == 0 and self.nPages > 0:
                     self.Laatste_Doc = True;
         if self.Weld == True:
+            self.STR_V = '%.2f, m/min' % self.TVerloop
             WeldMove = 'W'
         else:
             WeldMove = 'N'
