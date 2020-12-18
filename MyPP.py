@@ -610,7 +610,7 @@ class RobotPost(object):
                 #self.addline('WAIT_IP, i1#(%s:), %s, %.2f, NOP' % (self.TempInput, self.StandOutTemp, self.Timeout))
                 self.LayerCount = self.LayerCount +1
                 if self.LayerCount > 1:
-                    self.addline('CNVSET, GD#(4:GD004), P%i' % (self.C_COUNT + 3))
+                    self.addline('CNVSET, GD#(4:GD004), P%i' % (self.C_COUNT - 2))
                     self.addline('CALL, Z HOOGTE CHECK.prg')
                 #if self.Laag == self.CheckLaag:
                 #    self.addline('Laag checken')
