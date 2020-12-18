@@ -619,6 +619,7 @@ class RobotPost(object):
             self.addline('CLEAR, GD#(ALL)')
             self.addline('CLEAR, GR#(ALL)')
             self.addline('SHIFT-OFF')
+            self.addline('SNSSFTRST')
             self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
             for i in range(self.DummyRegels):
                 self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
