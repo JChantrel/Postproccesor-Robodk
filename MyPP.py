@@ -610,8 +610,11 @@ class RobotPost(object):
                 #self.addline('WAIT_IP, i1#(%s:), %s, %.2f, NOP' % (self.TempInput, self.StandOutTemp, self.Timeout))
                 self.LayerCount = self.LayerCount +1
                 if self.LayerCount > 1:
-                    self.addline('CNVSET, GD#(4:GD004), P%i' % (self.C_COUNT - 2))
-                    self.addline('CALL, Z HOOGTE CHECK.prg')
+                    if self.C_COUNT > 10:
+                        self.addline('CNVSET, GD#(4:GD004), P%i' % (self.C_COUNT - 2))
+                        self.addline('CALL, Z HOOGTE CHECK.prg')
+                    else:
+                        raise Exception("Sorry, Voeg wat dummy regels toe")
                 #if self.Laag == self.CheckLaag:
                 #    self.addline('Laag checken')
                 #    self.Laag = 0
@@ -640,7 +643,6 @@ class RobotPost(object):
             self.addline('CLEAR, GD#(ALL)')
             self.addline('CLEAR, GR#(ALL)')
             self.addline('SHIFT-OFF')
-            self.addline('SNSSFTRST')
             self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
             for i in range(self.DummyRegels):
                 self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
