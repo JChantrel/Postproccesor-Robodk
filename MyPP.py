@@ -9,6 +9,7 @@ from tkinter import filedialog
 import sys
 import os
 
+# De bestandsnaam omzetten naar een veilige bestandsnaam
 def get_safe_name(progname, max_chars=32):
     """Get a safe program name"""
     for c in '-[]/\\;,><&*:%=+@!#^()|?^':
@@ -25,12 +26,16 @@ def get_safe_name(progname, max_chars=32):
 def Pose_2_Panasonic(pose):
     return Pose_2_Motoman(pose)
 
+
+# Het grafishc interface voor de gebruiker
 class UI():
 
+    # Browse knop functie
     def getFolderPath():
         folder_selected = filedialog.askdirectory()
         Folder.set(folder_selected)
 
+    # Preset pulserend lassen
     def preset_puls():
         e0.delete(0, END)
         e1.delete(0, END)
@@ -46,6 +51,7 @@ class UI():
         e4.insert(END, '21')
         e5.insert(END, '0.3')
 
+    # Preset kortsluit lassen
     def preset_kort():
         e0.delete(0, END)
         e1.delete(0, END)
@@ -61,6 +67,7 @@ class UI():
         e4.insert(END, '16')
         e5.insert(END, '0.3')
 
+    # Variabele voor het gebruikers interface
     global Window
     Window = tkinter.Tk()
     Window.title('Instellingen')
@@ -74,7 +81,6 @@ class UI():
     TVerloop = StringVar()
     Tafel = StringVar()
     TorchHoek = StringVar()
-    LaagHoogte = StringVar()
     DummyRegels = StringVar()
     global Folder
     Folder = StringVar()
@@ -85,6 +91,7 @@ class UI():
     Puls_Kort.set('Pulserend')
     str_out = StringVar()
 
+    # labels voor alle varbiable
     Label(Window, text='Vul hieronder de gewenste waarde in', anchor=CENTER).grid(row=0, column=0, columnspan=3, pady=5)
     Label(Window, text='Arc stroom:').grid(row=1, sticky=E, padx=5)
     Label(Window, text='Arc spanning:').grid(row=2, sticky=E, padx=5)
@@ -95,23 +102,27 @@ class UI():
     Label(Window, text='Verloop tijd').grid(row=7, sticky=E, padx=5)
     Label(Window, text='Z hoogte plaat:').grid(row=8, sticky=E, padx=5)
     Label(Window, text='Z Hoek torch:').grid(row=9, sticky=E, padx=5)
-    Label(Window, text='Laag hoogte:').grid(row=10, sticky=E, padx=5)
     Label(Window, text='Dummy regels:').grid(row=11, sticky=E, padx=5)
     Label(Window, text='Folder:').grid(row=12, sticky=E, padx=5)
     Label(Window, text='Programmas per subfolder:').grid(row=13, sticky=E, padx=5)
     Label(Window, text='Pulserend/Kortsluit:').grid(row=14, sticky=E, padx=5)
     Label(Window, text='Presets:').grid(row=15, sticky=E, padx=5)
 
+    # Knop om in te drukken als alles is ingevuld
     Button(Window, text='OK', width=10, command=Window.destroy).grid(row=17, columnspan=3, pady=5)
 
+    # Variabele globaal maken zodat deze gebruikt kunnen worden in functies
     global e0
     global e1
     global e2
     global e3
     global e4
     global e5
+
+    # Lijst met de twee verschillende las mogelijkheden
     my_list = ['Pulserend','Kortsluit']
 
+    # Al de invulvlakken, knoppen en lijsten
     e0 = Entry(Window, width=10, textvariable = IArc)
     e1 = Entry(Window, width=10, textvariable = VArc)
     e2 = Entry(Window, width=10, textvariable = TArc)
@@ -121,7 +132,6 @@ class UI():
     e6 = Entry(Window, width=10, textvariable = TVerloop)
     e7 = Entry(Window, width=10, textvariable = Tafel)
     e8 = Entry(Window, width=10, textvariable = TorchHoek)
-    e9 = Entry(Window, width=10, textvariable = LaagHoogte)
     e10 = Entry(Window, width=10, textvariable = DummyRegels)
     b11 = Button(Window, text = 'Browse', command=getFolderPath)
     e12 = Entry(Window, width=10, textvariable = FolderSize)
@@ -129,19 +139,14 @@ class UI():
     b14 = Button(Window, text = 'Pulserend', width=12, command=preset_puls)
     b15 = Button(Window, text = 'Kortsluit', width=12, command=preset_kort)
 
-    #e0.insert(END, '60')
-    #e1.insert(END, '20.5')
-    #e2.insert(END, '0.25')
-    #e3.insert(END, '60')
-    #e4.insert(END, '21')
-    #e5.insert(END, '0.3')
+    # Vul voor elk invulvlak een standaard waarde in
     e6.insert(END, '2')
     e7.insert(END, '230.654')
     e8.insert(END, '67')
-    e9.insert(END, '2')
     e10.insert(END, '5')
     e12.insert(END, '20')
 
+    # Zet alle invulvlakken knoppen en lijsten op de juist plek
     e0.grid(row=1, column=1, pady=3)
     e1.grid(row=2, column=1, pady=3)
     e2.grid(row=3, column=1, pady=3)
@@ -151,7 +156,6 @@ class UI():
     e6.grid(row=7, column=1, pady=3)
     e7.grid(row=8, column=1, pady=3)
     e8.grid(row=9, column=1, pady=3)
-    e9.grid(row=10, column=1, pady=3)
     e10.grid(row=11, column=1, pady=3)
     b11.grid(row=12, column=1, pady=3)
     e12.grid(row=13, column=1, pady=3)
@@ -159,19 +163,21 @@ class UI():
     b14.grid(row=15, column=1, columnspan=2, padx=5, pady=3)
     b15.grid(row=16, column=1, columnspan=2, padx=5, pady=3)
 
+    # Geef alles een eenheid
     Label(Window, text='A').grid(row=1, column=2, sticky=W, padx=5)
     Label(Window, text='V').grid(row=2, column=2, sticky=W, padx=5)
     Label(Window, text='s').grid(row=3, column=2, sticky=W, padx=5)
     Label(Window, text='A').grid(row=4, column=2, sticky=W, padx=5)
     Label(Window, text='V').grid(row=5, column=2, sticky=W, padx=5)
     Label(Window, text='s').grid(row=6, column=2, sticky=W, padx=5)
-    Label(Window, text='s').grid(row=7, column=2, sticky=W, padx=5)
+    Label(Window, text='m/min').grid(row=7, column=2, sticky=W, padx=5)
     Label(Window, text='mm').grid(row=8, column=2, sticky=W, padx=5)
     Label(Window, text='°').grid(row=9, column=2, sticky=W, padx=5)
-    Label(Window, text='mm').grid(row=10, column=2, sticky=W, padx=5)
 
+    # Open het window
     Window.mainloop()
 
+# Het maken van het programma
 class RobotPost(object):
     """Robot post object defined for Panasonic robots"""
     #Bestand eigenschappen
@@ -193,53 +199,48 @@ class RobotPost(object):
     SPARE_PR = 95
 
     #Variabele voor het lassen
-    VArc = float(UI.VArc.get())             #Las spanning
-    IArc = float(UI.IArc.get())             #Las stroom
-    TArc = float(UI.TArc.get())             #Voorloopsnelheid
+    VArc = float(UI.VArc.get())             # Las spanning
+    IArc = float(UI.IArc.get())             # Las stroom
+    TArc = float(UI.TArc.get())             # Voorloopsnelheid
 
-    VKra = float(UI.VKra.get())             #Krater spanning
-    IKra = float(UI.IKra.get())             #Krater stroom
-    TKra = float(UI.TKra.get())             #Krater tijd
+    VKra = float(UI.VKra.get())             # Krater spanning
+    IKra = float(UI.IKra.get())             # Krater stroom
+    TKra = float(UI.TKra.get())             # Krater tijd
 
-    TVerloop = float(UI.TVerloop.get())
+    TVerloop = float(UI.TVerloop.get())     # Verloop tijd
 
-    Tafel = float(UI.Tafel.get())           #Z coordinaat van de tafel
+    Tafel = float(UI.Tafel.get())           # Z coordinaat van de tafel
 
-    TorchHoek = float(UI.TorchHoek.get())   #De hoek van de Torch
+    TorchHoek = float(UI.TorchHoek.get())   # De hoek van de Torch
 
-    LaagHoogte = float(UI.LaagHoogte.get()) #Om de hoeveel lagen checken voor hoogte
+    DummyRegels = int(UI.DummyRegels.get()) # Extra regels toevoegen om errors te voorkomen
 
-    DummyRegels = int(UI.DummyRegels.get()) #Extra regels toevoegen om errors te voorkomen
+    Folder = str(Folder.get())              # In welke folder alles opgeslagen moet worden
 
-    Folder = str(Folder.get())              #In welke folder alles opgeslagen moet worden
+    Puls_Kort = str(Puls_Kort.get())        # Pulserend of kortsluit lassen
 
-    Puls_Kort = str(Puls_Kort.get())        #Pulserend of kortsluit lassen
+    FolderSize = int(UI.FolderSize.get())   # Hoveel programmas's per folder
 
-    FolderSize = int(UI.FolderSize.get())   #Hoveel programmas's per folder
-
-    Timeout = 120           #Maximaal wachten op de input
-    TempInput = '5'         #Input nummer voor de Temp sensor
-    StandOutTemp = 'ON'     #De standaard waarde die gegeven wordt door de Temp sensor
-                            #Dus de waarde als de temp niet te hoog is
+    Timeout = 120           # Maximaal wachten op de input
+    TempInput = '5'         # Input nummer voor de Temp sensor
+    StandOutTemp = 'ON'     # De standaard waarde die gegeven wordt door de Temp sensor
+                            # Dus de waarde als de temp niet te hoog is
 
     REGISTER_DIGITS = 5
 
     PULSES_X_DEG = [1, 1, 1, 1, 1, 1]
 
     #Variabel voor dingen bij te houden
-    LINE_COUNT = 0
-    P_COUNT = 0
-    C_COUNT = 0
-    nProgs = 0
-    LBL_ID_COUNT = 0
-    Extrude = 0
-    Weld = False
-    Laag = 0
-    LayerCount = 0
-    Laatste_Doc = False
-    F_COUNT = 1
-    StrTVerloop = '%.2f, m/min' % TVerloop
-
+    LINE_COUNT = 0                          # Programma regels
+    P_COUNT = 0                             # Positie variabele voor Joint stelsel
+    C_COUNT = 0                             # Positie varian=bele voor Cartesian stelsel
+    nProgs = 0                              # Aantal subprogamas
+    LBL_ID_COUNT = 0                        # label ID Count
+    Weld = False                            # Geeft aan of er gelast wordt of niet
+    LayerCount = 0                          # Laag nummer
+    Laatste_Doc = False                     # Geeft aan of het het laaste bestand is in de submap
+    F_COUNT = 1                             # Subfolder nummer
+    StrTVerloop = '%.2f, m/min' % TVerloop  # String met de verloopsnelheid
 
     ROBOT_POST = ''
     ROBOT_NAME = ''
@@ -272,6 +273,7 @@ class RobotPost(object):
     POSE_FRAME = eye(4)
     LAST_CONFDATA = [None, None, None, None]
 
+    # Alle instellingen voor de robot
     def __init__(self, robotpost=None, robotname=None, robot_axes=6, **kwargs):
         self.ROBOT_POST = robotpost
         self.ROBOT_NAME = robotname
@@ -294,6 +296,7 @@ class RobotPost(object):
                 self.AXES_TURNTABLE.append(i)
                 self.HAS_TURNTABLE = True
 
+    # Begin van het bestand maken
     def ProgStart(self, progname, new_page=False):
         progname = get_safe_name(progname)
         progname_i = progname
@@ -316,10 +319,13 @@ class RobotPost(object):
         self.PROG_NAME_CURRENT = progname_i
         self.PROG_NAMES.append(progname_i)
 
+    # Einde van het bestand maken
     def ProgFinish(self, progname, new_page=False):
         progname = get_safe_name(progname)
         if not new_page:
             self.nPages = 0
+
+        # De header
         header = ''
         header += '[Description]\n'
         header += 'Robot, %s' % self.ROBOT_NAME + '\n'
@@ -336,13 +342,12 @@ class RobotPost(object):
         header += '\n'
         header += '[Pose]\n'
         header += '/Name, Type, X, Y, Z, U, V, W'
-        import time
-        Extrude = 0
-        datestr = time.strftime('%Y/%m/%d %H:%M')
+
+        # De variabele
         header_ins = '\n'
-        header_ins += '[Variable]\n'            #Hier kunnen variabele in opgeslagen worden
-        header_ins += 'LB, LB001, Byte, 0\n'    #Handig voor de delay of de input voor de
-        header_ins += 'LB, LB002, Byte, 0\n'    #Temp enz
+        header_ins += '[Variable]\n'
+        header_ins += 'LB, LB001, Byte, 0\n'
+        header_ins += 'LB, LB002, Byte, 0\n'
         header_ins += 'LB, LB003, Byte, 0\n'
         header_ins += 'LB, LB004, Byte, 0\n'
         header_ins += 'LB, LB005, Byte, 0\n'
@@ -364,6 +369,7 @@ class RobotPost(object):
         header_ins += '\n'
         header_ins += '[Command]'
 
+        # Alles toevoegen aan het bestand
         self.PROG.insert(0, header_ins)
         self.PROG_TARGETS.insert(0, header)
         self.PROG = self.PROG_TARGETS + self.PROG
@@ -377,6 +383,7 @@ class RobotPost(object):
         self.LBL_ID_COUNT = 0
         return
 
+    # Programma opslaan (wordt niet gebruikt)
     def progsave(self, folder, progname, ask_user=False, show_result=False):
         print (folder)
         if not folder.endswith('/'):
@@ -410,13 +417,15 @@ class RobotPost(object):
                 os.startfile(filesave)
         return
 
+    # Programma opslaan (wel gebruikt)
+    # Hier worden de programmas ook verdeeld over de submappen
     def ProgSave(self, folder, progname, ask_user=False, show_result=False):
         progname = get_safe_name(progname)
         nfiles = len(self.PROG_LIST)
         if nfiles >= 1:
             for i in range(len(self.PROG_LIST)):
                 if i % self.FolderSize == 0:
-                    directory = 'test %i' % self.F_COUNT
+                    directory = 'Subfolder %i' % self.F_COUNT
                     parent_dir = self.Folder
                     path = os.path.join(parent_dir, directory)
                     os.mkdir(path)
@@ -428,6 +437,7 @@ class RobotPost(object):
                 self.PROG = []
                 self.LINE_COUNT = 0
 
+            # Master bestanden maken
             if len(self.PROG_NAMES_MAIN) > 1:
                 for i in range(1,self.F_COUNT):
                     progname_main = 'M_Print3D_%i' % i
@@ -441,7 +451,7 @@ class RobotPost(object):
                 for i in range(self.F_COUNT-1,0,-1):
                     self.PROG = self.PROG_LIST.pop()
                     progname_last = self.PROG_NAMES.pop()
-                    self.progsave('%s%s%i' % (self.Folder, '/test ', i), progname_last, ask_user, show_result)
+                    self.progsave('%s%s%i' % (self.Folder, '/Subfolder ', i), progname_last, ask_user, show_result)
             if len(self.PROG_FILES) == 0:
                 return
             first_file = self.PROG_FILES[0]
@@ -452,7 +462,7 @@ class RobotPost(object):
                 if i % self.FolderSize == 0:
                     FolderNum = FolderNum + 1
                 self.PROG = self.PROG_LIST[i]
-                self.progsave('%s%s%i' % (self.Folder, '/test ', FolderNum), self.PROG_NAMES[i], False, show_result)
+                self.progsave('%s%s%i' % (self.Folder, '/Subfolder ', FolderNum), self.PROG_NAMES[i], False, show_result)
 
         elif nfiles == 1:
             self.PROG = self.PROG_NAMES[0]
@@ -463,11 +473,13 @@ class RobotPost(object):
         if show_result and len(self.LOG) > 0:
             mbox('Program generation LOG:\n\n' + self.LOG)
 
+    # Programma naar robot sturen wordt niet gebruikt
     def ProgSendRobot(self, robot_ip, remote_path, ftp_user, ftp_pass):
         """Send a program to the robot using the provided parameters. This method is executed right after ProgSave if we selected the option "Send Program to Robot".
         The connection parameters must be provided in the robot connection menu of RoboDK"""
         UploadFTP(self.PROG_FILES, robot_ip, remote_path, ftp_user, ftp_pass)
 
+    # Functie voor een MoveJ commando
     def MoveJ(self, pose, joints, conf_RLF=None):
         """Add a joint movement"""
         self.page_size_control()
@@ -475,11 +487,14 @@ class RobotPost(object):
         self.addline('MOVEP, P%i, %s, ' % (target_id, self.STR_V) + 'N')
         self.LAST_POSE = pose
 
+    # Functie voor een MoveL commando
+    # Deze wordt ook gebruikt door de slicer
     def MoveL(self, pose, joints, conf_RLF=None):
         """Add a linear movement"""
         self.page_size_control()
         target_id = self.add_target_cartesian(pose, joints, conf_RLF)
 
+        # Herken of het een las is op lucht beweging
         if self.STR_V == '1.80, m/min' or self.STR_V == '1.20, m/min' or self.STR_V == self.StrTVerloop:
             if self.Weld == False:
                 self.PROG[-1] = self.PROG[-1].replace('N', 'W')
@@ -494,6 +509,8 @@ class RobotPost(object):
                 self.Weld = False
                 if self.nPages % self.FolderSize == 0 and self.nPages > 0:
                     self.Laatste_Doc = True;
+
+        # verloopsnelheid aanpassen
         if self.Weld == True:
             self.STR_V = '%.2f, m/min' % self.TVerloop
             WeldMove = 'W'
@@ -501,10 +518,14 @@ class RobotPost(object):
             WeldMove = 'N'
         self.addline('MOVEL, P%i, %s%s' % (target_id, self.STR_V, self.STR_CNT) + ' , 0, %s' % (WeldMove))
         self.LAST_POSE = pose
+
+        # Is het het laaste document in de subfolder dan is het bestand 'vol' na een las einde
         if self.Laatste_Doc == True:
+            self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
             self.Laatste_Doc = False
             self.LINE_COUNT = self.MAX_LINES_X_PROG
 
+    # Functie voor een MoveC commando
     def MoveC(self, pose1, joints1, pose2, joints2, conf_RLF_1=None, conf_RLF_2=None):
         """Add a circular movement"""
         self.page_size_control()
@@ -519,6 +540,7 @@ class RobotPost(object):
         self.LAST_POSE = None
         return
 
+    # Referencie frame aanpassen (niet gebruikt)
     def setFrame(self, pose, frame_id, frame_name):
         """Change the robot reference frame"""
         xyzwpr = Pose_2_Panasonic(pose)
@@ -534,6 +556,7 @@ class RobotPost(object):
             self.RunMessage('%.1f,%.1f,%.1f,%.1f,%.1f,%.1f' % (xyzwpr[0], xyzwpr[1], xyzwpr[2], xyzwpr[3], xyzwpr[4], xyzwpr[5]), True)
         return
 
+    # Tool aanpassen (niet gebruikt)
     def setTool(self, pose, tool_id, tool_name):
         """Change the robot TCP"""
         if tool_id > 0:
@@ -541,6 +564,7 @@ class RobotPost(object):
         xyzwpr = Pose_2_Panasonic(pose)
         self.addline('TOOL, %i:%s' % (self.ACTIVE_TOOL, str(self.TL_NAME)))
 
+    # delay of stop toevoegen
     def Pause(self, time_ms):
         """Pause the robot program"""
         if time_ms <= 0:
@@ -548,25 +572,30 @@ class RobotPost(object):
         else:
             self.addline('DELAY, %.2f,' % (time_ms * 0.001))
 
+    # Snelheid aanpassen (niet gebruikt)
     def setSpeed(self, speed_mms):
         """Changes the robot speed (in mm/s)"""
         speed_m_min = speed_mms * 60.0 * 0.001
         speed = max(0.01, min(speed_m_min, 120.0))
         self.STR_V = '%.2f, m/min' % speed
 
+    # Versnelling aanpassen (niet gebruikt)
     def setAcceleration(self, accel_mmss):
         """Changes the robot acceleration (in mm/s2)"""
         self.addlog('Set acceleration not defined')
 
+    # Assen snelheid aanpassen (niet gebruikt)
     def setSpeedJoints(self, speed_degs):
         """Changes the robot joint speed (in deg/s)"""
         speedj = max(0.01, min(speed, 100.0))
         self.STR_VJ = '%.2f, mm' % speedj
 
+    # Assen versnelling aanpassen (niet gebruikt)
     def setAccelerationJoints(self, accel_degss):
         """Changes the robot joint acceleration (in deg/s2)"""
         self.addlog('Set acceleration not defined')
 
+    # Geen idee (niet gebruikt)
     def setZoneData(self, zone_mm):
         """Changes the zone data approach (makes the movement more smooth)"""
         if zone_mm < 0:
@@ -574,6 +603,7 @@ class RobotPost(object):
         else:
             self.STR_PL = ''
 
+    # Digitale output aan of uit zetten (niet gebruikt)
     def setDO(self, io_var, io_value):
         """Set a Digital Output"""
         if type(io_var) != str:
@@ -585,10 +615,12 @@ class RobotPost(object):
                 io_value = 'OFF'
         self.addline('OUT, o1#(%s:), %s' % (io_var, io_value))
 
+    # Analoge output aan of uit zetten (niet gebruikt)
     def setAO(self, io_var, io_value):
         """Set an Analog Output"""
         self.addline('Analog output')
 
+    # Wachten tot input gewenste waarde heeft
     def waitDI(self, io_var, io_value, timeout_ms=0):
         """Waits for an input io_var to attain a given value io_value. Optionally, a timeout can be provided."""
         if type(io_var) != str:
@@ -600,6 +632,7 @@ class RobotPost(object):
                 io_value = 'OFF'
         self.addline('WAIT_IP, i1#(%s:), %s, %.2f, NOP' % (io_var, io_value, timeout_ms * 0.001))
 
+    # Hier wordt G-code gegenereert door slicer omgezet in robot commando's
     def RunCode(self, code, is_function_call=False):
         """Turns call's for extruder to ARC"""
         code = get_safe_name(code)
@@ -615,24 +648,21 @@ class RobotPost(object):
                         self.addline('CALL, Z HOOGTE CHECK.prg')
                     else:
                         raise Exception("Sorry, Voeg wat dummy regels toe")
-                #if self.Laag == self.CheckLaag:
-                #    self.addline('Laag checken')
-                #    self.Laag = 0
-                #else:
-                #    self.Laag = self.Laag + 1
                 return
             else:
                 return
+        # Aan het einde van het progamma terug naar home
         if code.find('onFinish') != -1:
             self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
             return
+        # Als de code geen extruder code is kan deze toegevoegt worden
         if code.find('Extruder') == -1:
             code.replace(' ', '_')
             self.addline('CALL, %s' % code + '.prg')
         else:
             return
 
-
+    # Wordt gebruikt om aan het begin van het programma wat regels toe te voegen
     def RunMessage(self, message, iscomment=False):
         """Turn Show Weld gun into WPLS, ON"""
         if message == 'Show Weld gun':
@@ -644,11 +674,16 @@ class RobotPost(object):
             self.addline('CLEAR, GR#(ALL)')
             self.addline('SHIFT-OFF')
             self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
+
+            # Dummy regels zijn nodig om errors te voorkomen door hier regels
+            # toe te voegen zijn er op andere plekken geen problemen met
+            # code die terug in het bestand kijkt
             for i in range(self.DummyRegels):
                 self.addline('MOVEP, GP#(100:GP HOME), 80.0, %, N')
         else:
             return
 
+    # Controleert of het bestand vol is
     def page_size_control(self):
         if self.LINE_COUNT >= self.MAX_LINES_X_PROG:
             self.ProgFinish(self.PROG_NAME, True)
@@ -657,6 +692,7 @@ class RobotPost(object):
             if self.Puls_Kort == 'Pulserend':
                 self.addline('WPLS, ON')
 
+    # Voegt een programma regel toe
     def addline(self, newline, movetype=' '):
         """Add a program line"""
         if self.nProgs > 1 and not self.INCLUDE_SUB_PROGRAMS:
@@ -665,23 +701,19 @@ class RobotPost(object):
         self.LINE_COUNT = self.LINE_COUNT + 1
         self.PROG.append(newline)
 
-    def rewriteline(self, newline, movetype=' '):
-        """Add a program line"""
-        if self.nProgs > 1 and not self.INCLUDE_SUB_PROGRAMS:
-            return
-        self.page_size_control()
-        self.PROG[-1] = (newline)
-
+    # Voegt een programma regel toe aan het einde
     def addline_targets(self, newline):
         """Add a line at the end of the program (used for targets)"""
         self.PROG_TARGETS.append(newline)
 
+    # Voegt log toe (niet gebruikt)
     def addlog(self, newline):
         """Add a log message"""
         if self.nProgs > 1 and not self.INCLUDE_SUB_PROGRAMS:
             return
         self.LOG = self.LOG + newline + '\n'
 
+    # Cartesian stelsel gebruiken
     def setCartesian(self, confdata):
         if self.ACTIVE_FRAME is not None and self.ACTIVE_FRAME != self.LAST_CONFDATA[1]:
             self.LAST_CONFDATA[1] = self.ACTIVE_FRAME
@@ -694,6 +726,7 @@ class RobotPost(object):
         self.LAST_CONFDATA[0] = 2
         return
 
+    # Robot assen assenstel gebruiken
     def setPulses(self):
         if self.LAST_CONFDATA[0] is None:
             self.LAST_CONFDATA[2] = self.ACTIVE_TOOL
@@ -705,6 +738,7 @@ class RobotPost(object):
         self.LAST_CONFDATA[3] = None
         return
 
+    # Robot assen positie toevoegen
     def add_target_joints(self, joints):
         if self.nProgs > 1 and not self.INCLUDE_SUB_PROGRAMS:
             return
@@ -718,17 +752,25 @@ class RobotPost(object):
         self.addline_targets('P%i, AU, ' % cid + (',').join(str_pulses))
         return cid
 
+    # Cartesian positie toevoegen
     def add_target_cartesian(self, pose, joints, conf_RLF):
         if self.nProgs > 1 and not self.INCLUDE_SUB_PROGRAMS:
             return
         else:
             xyzwpr = Pose_2_Panasonic(pose)
+
+            # Nu moet er nog de daadwerkelijke hoogt ingesteld worden
             xyzwpr[2] = xyzwpr[2] - self.Tafel
+
+            # Dit voorkomt dat de robot de verkeerde kant op gaat
             if xyzwpr[3] - 180 <= -180:
                 xyzwpr[3] = xyzwpr[3] + 180
             else:
                 xyzwpr[3] = xyzwpr[3] - 180
+
+            # ingestelde torchhoek invullen
             xyzwpr[5] = self.TorchHoek
+
             if conf_RLF is None:
                 conf_RLF = [
                  0, 0, 0]
