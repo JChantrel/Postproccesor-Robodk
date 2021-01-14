@@ -647,7 +647,7 @@ class RobotPost(object):
                         self.addline('CNVSET, GD#(4:GD004), P%i' % (self.C_COUNT - 2))
                         self.addline('CALL, Z HOOGTE CHECK.prg')
                     else:
-                        raise Exception("Sorry, Voeg wat dummy regels toe")
+                        return
                 return
             else:
                 return
