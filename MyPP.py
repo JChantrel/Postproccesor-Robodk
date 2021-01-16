@@ -383,7 +383,7 @@ class RobotPost(object):
         self.LBL_ID_COUNT = 0
         return
 
-    # Programma opslaan (wordt niet gebruikt)
+    # Programma opslaan sub functie
     def progsave(self, folder, progname, ask_user=False, show_result=False):
         print (folder)
         if not folder.endswith('/'):
